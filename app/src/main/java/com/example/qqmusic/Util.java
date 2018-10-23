@@ -1,5 +1,7 @@
 package com.example.qqmusic;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import okhttp3.OkHttpClient;
@@ -12,6 +14,7 @@ public class Util {
     public static void sendRequest(String name, final okhttp3.Callback callback) {
         final String URL = Final_music.api_music_list_front + name + Final_music
                 .api_music_list_rear;
+        Log.d("Lpp", URL);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -26,6 +29,7 @@ public class Util {
         }).start();
     }
 
+    //解释音乐搜索的
     public static MusicItem requestDataOfMusicItem(String musicJosn) {
         Gson gson = new Gson();
         MusicItem musicBack = gson.fromJson(musicJosn,

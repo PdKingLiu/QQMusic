@@ -10,4 +10,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TabLayoutTextSize" >
+        <item name="android:textSize">@dimen/tablayout_size</item>
+    </style>
+
 </resources>

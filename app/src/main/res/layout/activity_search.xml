@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f4f4f4"
+    android:orientation="vertical"
     tools:context=".SearchActivity">
 
     <LinearLayout
@@ -16,21 +18,24 @@
             android:id="@+id/exit_search"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical"
             android:src="@drawable/search_exit" />
 
         <EditText
             android:id="@+id/search_input"
             android:layout_width="0dp"
-            android:textColorHint="#A8E5C8"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
             android:hint="搜索音乐、视频、歌单、歌手、用户"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textColor="@android:color/white"
+            android:textColorHint="#A8E5C8"
             android:textSize="17sp" />
 
         <ImageView
@@ -40,5 +45,9 @@
             android:layout_margin="10dp"
             android:src="@drawable/search_speak" />
     </LinearLayout>
+
+    <!--<include layout="@layout/history_layout" />-->
+
+    <include layout="@layout/search_success" />
 
 </LinearLayout>

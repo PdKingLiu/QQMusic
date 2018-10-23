@@ -109,7 +109,7 @@ public class MusicItem implements Serializable {
                 @SerializedName("newStatus")
                 public int newStatus;
                 @SerializedName("nt")
-                public int nt;
+                public long nt;
                 @SerializedName("pay")
                 public PayBean pay;
                 @SerializedName("pure")
