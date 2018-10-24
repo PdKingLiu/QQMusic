@@ -29,13 +29,15 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="25dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="23dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/icon_sq" />
 
             <ImageView
-                android:layout_width="25dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/icon_theone" />
@@ -46,15 +48,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="周杰伦·范特西"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/music_icon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="10dp"
         android:src="@drawable/icon_more" />

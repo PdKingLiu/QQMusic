@@ -20,7 +20,8 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.music_item_layout, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout
+                .music_item_layout, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -29,7 +30,7 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         MusicItem.DataBean.SongBean.ListBean song = list.get(i);
         viewHolder.music_name.setText(song.title);
-        String version = song.singer.get(0).name + song.album.name;
+        String version = song.singer.get(0).name + "  ·  " + song.album.name;
         viewHolder.music_verison.setText(version);
     }
 

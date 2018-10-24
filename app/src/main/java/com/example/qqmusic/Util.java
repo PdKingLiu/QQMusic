@@ -11,8 +11,9 @@ public class Util {
 
 
     //请求网络的
-    public static void sendRequest(String name, final okhttp3.Callback callback) {
-        final String URL = Final_music.api_music_list_front + name + Final_music
+    public static void sendRequest(String name, int flag, final okhttp3.Callback callback) {
+        final String URL = Final_music.api_music_list_front + flag + Final_music
+                .api_music_list_middle + name + Final_music
                 .api_music_list_rear;
         Log.d("Lpp", URL);
         new Thread(new Runnable() {

@@ -15,13 +15,15 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:clickable="true"
             android:id="@+id/exit_search"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/search_exit" />
+            android:src="@drawable/search_exit"
+            android:focusable="true" />
 
         <EditText
             android:id="@+id/search_input"
@@ -39,11 +41,13 @@
             android:textSize="17sp" />
 
         <ImageView
+            android:clickable="true"
             android:id="@+id/search_speak"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_margin="10dp"
-            android:src="@drawable/search_speak" />
+            android:src="@drawable/search_speak"
+            android:focusable="true" />
     </LinearLayout>
 
     <!--<include layout="@layout/history_layout" />-->
