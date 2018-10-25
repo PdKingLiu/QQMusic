@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -28,8 +29,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity implements OnClickListener {
+public class SearchActivity extends BaseActivity {
 
+    private OnIconCallbackListener onIconCallbackListener;
     private ImageView exit_search;
     private ImageView speak_search;
     private EditText search_edit;
@@ -37,8 +39,18 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
     private RecyclerView music_list;
     private MusicItemAdapter musicItemAdapter;
     private SmartRefreshLayout smartRefreshLayout;
+    private MusicItem.DataBean.SongBean.ListBean listBean;
     private int flag = 0;
     private List<MusicItem.DataBean.SongBean.ListBean> adapterList;
+    boolean flag_listener = true;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Url != null) {
+            onIconCallbackListener.changelayout(Url);
+        }
+    }
 
     @Override
 
@@ -49,10 +61,34 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
         initView();
         inputListener();
         reflushListener();
+        onIconCallbackListener = (OnIconCallbackListener) getIntent().getSerializableExtra("call");
+
+
         exit_search.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        speak_search.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(SearchActivity.this, "暂未实现", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // 监听recycleView 点击
+    private void recyclerViewListener() {
+
+        musicItemAdapter.setOnItemClickListenter(new MusicItemAdapter.OnItemClickListenter() {
+            @Override
+            public void onItemClick(View view, int position) {
+                listBean = adapterList.get(position);
+                Log.d("Lpp", listBean.name);
+                Log.d("Lpp", music_Name + "===" + music_Version + "===" + status_image + "===" +
+                        circleImageView);
+                requestMusic(listBean);
             }
         });
     }
@@ -74,8 +110,9 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
                         public void onResponse(Call call, Response response) throws IOException {
                             String result = response.body().string();
                             MusicItem musicItem = Util.requestDataOfMusicItem(result);
-                            for (MusicItem.DataBean.SongBean.ListBean listBean: musicItem.data.song.list
-                                 ) {
+                            for (MusicItem.DataBean.SongBean.ListBean listBean : musicItem.data
+                                    .song.list
+                                    ) {
                                 adapterList.add(listBean);
                             }
                             runOnUiThread(new Runnable() {
@@ -116,6 +153,7 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
                             MusicItem musicItem = Util.requestDataOfMusicItem(result);
 //                            Log.d("Lpp", "here");
                             changeListView(musicItem);
+
 //                            Log.d("Lpp", "three");
                         }
                     });
@@ -141,6 +179,7 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
                 LinearLayoutManager layoutManager = new LinearLayoutManager(SearchActivity.this);
                 music_list.setLayoutManager(layoutManager);
                 music_list.setAdapter(musicItemAdapter);
+                recyclerViewListener();
             }
         });
     }
@@ -156,20 +195,5 @@ public class SearchActivity extends AppCompatActivity implements OnClickListener
     private void initView() {
     }
 
-    @Override
-    public void onClick(View v) {
-        Log.d("Lpp", v.getId() + "");
-        Log.d("Lpp", "" + R.id.exit_search);
-        Log.d("Lpp", "" + R.id.search_speak);
-        switch (v.getId()) {
-            case R.id.exit_search:
-                this.finish();
-                break;
-            case R.id.search_speak:
-                Toast.makeText(this, "暂未实现", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-    }
+
 }

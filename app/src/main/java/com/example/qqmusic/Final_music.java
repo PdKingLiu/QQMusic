@@ -3,13 +3,17 @@ package com.example.qqmusic;
 public class Final_music {
 
 
-    //下载音乐的接口
-    static String music_url_front = "https://dl.stream.qqmusic.qq.com/M800";
+    //专辑图片url
 
-    static String music_url_rear =
-            ".mp3?vkey=B65CE7850FF54A091AE51E59382B937F8AFD9" +
-                    "FABB6E684FD4325C292F8012DC8BEC3F5711851E900EE90" +
-                    "B7F54844C50F764895B6C88FBDB5&guid=5150825362&fromtag=1";
+    static String music_icon_front = "http://y.gtimg.cn/music/photo_new/T002R300x300M000";
+
+    static String music_icon_rear = ".jpg?max_age=2592000";
+
+
+    //下载音乐的接口
+    static String music_url_front = "http://ws.stream.qqmusic.qq.com/C100";
+
+    static String music_url_rear = ".m4a?fromtag=0&guid=126548448";
 
 
     //查询音乐的接口

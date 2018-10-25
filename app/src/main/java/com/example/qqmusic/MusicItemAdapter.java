@@ -5,11 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
-public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.ViewHolder> {
+public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.ViewHolder>
+        implements View.OnClickListener {
 
     public MusicItemAdapter(List<MusicItem.DataBean.SongBean.ListBean> list) {
         this.list = list;
@@ -17,12 +19,31 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
 
     private List<MusicItem.DataBean.SongBean.ListBean> list;
 
+    private OnItemClickListenter mOnItemClickListenter = null;
+
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListenter != null) {
+            mOnItemClickListenter.onItemClick(v, (int) v.getTag());
+        }
+    }
+
+    public static interface OnItemClickListenter {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListenter(OnItemClickListenter listenter) {
+        this.mOnItemClickListenter = listenter;
+    }
+
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout
                 .music_item_layout, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
+        view.setOnClickListener(this);
         return holder;
     }
 
@@ -30,6 +51,7 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         MusicItem.DataBean.SongBean.ListBean song = list.get(i);
         viewHolder.music_name.setText(song.title);
+        viewHolder.itemView.setTag(i);
         String version = song.singer.get(0).name + "  ·  " + song.album.name;
         viewHolder.music_verison.setText(version);
     }
@@ -45,9 +67,13 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
 
         private TextView music_verison;
 
+        public LinearLayout layout;
+
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
+
+            layout = itemView.findViewById(R.id.group_layout);
 
             music_name = itemView.findViewById(R.id.music_name);
 

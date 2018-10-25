@@ -10,8 +10,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="TabLayoutTextSize" >
+    <style name="TabLayoutTextSize">
         <item name="android:textSize">@dimen/tablayout_size</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
