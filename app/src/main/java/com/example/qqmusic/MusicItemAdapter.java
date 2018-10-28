@@ -67,13 +67,11 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
 
         private TextView music_verison;
 
-        public LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
-            layout = itemView.findViewById(R.id.group_layout);
 
             music_name = itemView.findViewById(R.id.music_name);
 

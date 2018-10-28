@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single" />
+    <item android:title="个性装扮"></item>
+    <item android:title="消息中心"></item>
+    <item android:title=""></item>
+    <item android:title="免流量服务"></item>
+    <item android:title="定时关闭"></item>
+    <item android:title="仅Wi-Fi联网"></item>
+    <item android:title="流量提醒"></item>
+    <item android:title="听歌偏好"></item>
+    <item android:title=""></item>
+    <item android:title="微云音乐网盘"></item>
+    <item android:title="导入外部歌单"></item>
+    <item android:title="清理空间"></item>
+    <item android:title="帮助和反馈"></item>
+    <item android:title="关于QQ音乐"></item>
+
+</menu>

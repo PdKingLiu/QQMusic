@@ -3,11 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:visibility="visible"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -15,14 +17,17 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:text="搜索历史"
+            android:textSize="16sp"
             android:textColor="#818181" />
 
         <TextView
+            android:id="@+id/clean_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
+            android:textSize="16sp"
             android:text="清空历史"
             android:textColor="@color/colorPrimary" />
 
