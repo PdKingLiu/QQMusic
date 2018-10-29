@@ -114,17 +114,18 @@ public class SearchFragment extends Fragment {
         search_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Lpp+", position+"");
-                Log.d("Lpp+", historyList+"");
+                Log.d("Lpp===", position + "");
+                Log.d("Lpp===", historyList.getItem(position) + "");
                 String s = historyList.getItem(position);
-                search_edit.setText(s);
-                searchMusicByItemClick(s);
+                input_string = s;
+                search_edit.setText(input_string);
+                searchMusicByItemClick(input_string);
             }
         });
     }
 
     //通过历史item点击搜索
-    private void searchMusicByItemClick(String s) {
+    private void searchMusicByItemClick(String input_string) {
         if (historyList != null) {
             flag = 0;
             int i;
@@ -443,12 +444,13 @@ public class SearchFragment extends Fragment {
         exit_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity().getWindow().getAttributes().softInputMode == WindowManager
+                /*if (getActivity().getWindow().getAttributes().softInputMode == WindowManager
                         .LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
-                            .getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                    Log.d("hehehe", "onClick: hhhh");
                 }
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+                        .getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);*/
                 LinearLayout linearLayout = getActivity().findViewById(R.id
                         .layout_apart_linearlayout);
                 FrameLayout frameLayout = getActivity().findViewById(R.id.layout_apart_framelayout);
