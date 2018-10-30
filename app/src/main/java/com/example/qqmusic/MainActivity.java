@@ -27,6 +27,12 @@ import com.example.qqmusic.data.PlayHistory;
 
 import org.litepal.LitePal;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,22 +59,22 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private List<PlayHistory> mPlayHistoryList;
 
-    public CircleImageView getBottom_circleimageview() {
-        return bottom_circleimageview;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LitePal.getDatabase();
         init();
+
+
         statusListener();
         searchListener();
         setMainPagerAdapter();
         popMenuListener();
         initBottomPlay();
     }
+
+
 
     private void initBottomPlay() {
         mPlayHistoryList = LitePal.findAll(PlayHistory.class);
