@@ -1,15 +1,14 @@
 package com.example.qqmusic;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +21,6 @@ import android.widget.Toast;
 
 import com.example.qqmusic.data.LocalMusic;
 
-import org.litepal.LitePal;
-
 import java.util.List;
 
 
@@ -33,7 +30,8 @@ public class LocalMusicFragment extends Fragment {
     private ImageView exit_icon;
     private Button query;
     List<LocalMusic> musicList;
-
+    RecyclerView localMusicRecyclerView;
+    private LocalMusicAdapter localMusicRecyclerViewAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +43,25 @@ public class LocalMusicFragment extends Fragment {
         queryListener();
         exit_iconListener();
         return view;
+    }
+
+    private void initLocalMusicRecyclerView() {
+        localMusicRecyclerViewAdapter = new LocalMusicAdapter(musicList);
+        localMusicRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        localMusicRecyclerViewAdapter.setOnItemClickListenter(new LocalMusicAdapter
+                .OnItemClickListenter() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.d("Lpp", musicList.get(position).toString());
+            }
+        });
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                localMusicRecyclerView.setAdapter(localMusicRecyclerViewAdapter);
+            }
+        });
+
     }
 
     private void queryListener() {
@@ -64,8 +81,7 @@ public class LocalMusicFragment extends Fragment {
                         mainActivity.localMusicList = Util.getLocalMusic(getContext());
                         musicList = mainActivity.localMusicList;
                     }
-                    Log.d("Lpp", musicList.get(0).toString() + "\n" + musicList.get(1));
-
+                    initLocalMusicRecyclerView();
                 }
             }
         });
@@ -74,8 +90,10 @@ public class LocalMusicFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        Log.d("Lpp", "here");
         switch (requestCode) {
             case 1:
+                Log.d("Lpp", "three");
                 if (grantResults.length > 0 && grantResults[0] == PackageManager
                         .PERMISSION_GRANTED) {
                     if (mainActivity.localMusicList != null && mainActivity.localMusicList.size()
@@ -85,6 +103,7 @@ public class LocalMusicFragment extends Fragment {
                         mainActivity.localMusicList = Util.getLocalMusic(getContext());
                         musicList = mainActivity.localMusicList;
                     }
+                    initLocalMusicRecyclerView();
                     Log.d("Lpp", musicList.get(0).toString() + "\n" + musicList.get(1));
                 } else {
                     Toast.makeText(mainActivity, "You deny the permission", Toast.LENGTH_SHORT)
@@ -92,6 +111,7 @@ public class LocalMusicFragment extends Fragment {
                 }
                 break;
             default:
+                Log.d("Lpp", "nere");
                 break;
         }
     }
@@ -122,6 +142,7 @@ public class LocalMusicFragment extends Fragment {
 
 
     private void init(View view) {
+        localMusicRecyclerView = view.findViewById(R.id.local_recyclerView);
         query = view.findViewById(R.id.query);
         exit_icon = view.findViewById(R.id.exit_search);
         mainActivity = (MainActivity) getActivity();
