@@ -1,14 +1,19 @@
 package com.example.qqmusic;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,9 +26,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.qqmusic.data.LocalMusic;
+import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
 
 import org.litepal.LitePal;
@@ -38,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static org.litepal.LitePalApplication.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private List<PlayHistory> mPlayHistoryList;
     public List<LocalMusic> localMusicList;
+    public List<LocalPlayHistory> mLocalPlayHistoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +83,17 @@ public class MainActivity extends AppCompatActivity {
         setMainPagerAdapter();
         popMenuListener();
         initBottomPlay();
+        initLocalBottomPlay();
     }
 
-
+    private void initLocalBottomPlay() {
+        mLocalPlayHistoryList = LitePal.findAll(LocalPlayHistory.class);
+        if (mLocalPlayHistoryList.size() != 0) {
+            LocalPlayHistory localPlayHistory = mLocalPlayHistoryList.get(0);
+            bottom_musicname.setText(localPlayHistory.getSong());
+            bottom_musicversion.setText(localPlayHistory.getSinger());
+        }
+    }
 
 
     private void initBottomPlay() {
@@ -266,6 +284,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else if (mPlayHistoryList.size() != 0) {
                     setMusic(mPlayHistoryList.get(0).getMusicUrl());
+                } else if (mLocalPlayHistoryList.size() != 0) {
+                    setMusic(mLocalPlayHistoryList.get(0).path);
                 }
             }
         });
@@ -291,9 +311,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission
+                        .READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "授权成功，请再次点击", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this, "您拒绝了权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private void init() {
 
         localMusicList = LitePal.findAll(LocalMusic.class);
+
         drawlayout_pop = findViewById(R.id.menu);
         mDrawerLayout = findViewById(R.id.menu_pop);
         bottom_circleimageview = findViewById(R.id.music_icon);

@@ -44,8 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         app:tabGravity="fill"
-        app:tabMaxWidth="0dp"
         app:tabIndicatorColor="@color/colorPrimary"
+        app:tabMaxWidth="0dp"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextAppearance="@style/TabLayoutTextSize"
         app:tabTextColor="#808080">
@@ -76,7 +76,9 @@
     <Button
         android:id="@+id/query"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="搜索本地歌曲" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/local_recyclerView"
         android:layout_width="match_parent"

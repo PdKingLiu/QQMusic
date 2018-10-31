@@ -6,5 +6,6 @@
         <mapping class="com.example.qqmusic.data.SearchHistory"> </mapping>
         <mapping class="com.example.qqmusic.data.PlayHistory"> </mapping>
         <mapping class="com.example.qqmusic.data.LocalMusic"> </mapping>
+        <mapping class="com.example.qqmusic.data.LocalPlayHistory"> </mapping>
     </list>
 </litepal>

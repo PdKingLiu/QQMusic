@@ -395,8 +395,6 @@ public class SearchFragment extends Fragment {
                 + listBean.file.mediaMid
                 + Final_music.music_url_rear;
 
-        Log.d("Lpp", "icon_url:" + icon_url);
-        Log.d("Lpp", "music_url:" + music_url);
         mainActivity.setMusicVersionIcon(icon_url);
         mainActivity.setBottomNameAndVersion(listBean.title,
                 listBean.singer.get(0).name);

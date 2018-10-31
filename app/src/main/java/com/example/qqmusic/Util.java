@@ -75,8 +75,22 @@ public class Util {
                         .Media.SIZE));
                 localMusic.album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio
                         .Media.ALBUM));
+
+                if (localMusic.getSong().indexOf('-') != -1) {
+                    if (localMusic.getSong().indexOf('[') != -1) {
+                        localMusic.song = localMusic.getSong().split(" - ")[1].split("\\[")[0];
+                    } else {
+                        localMusic.song = localMusic.getSong().split(" - ")[1].split(".m")[0];
+                    }
+                } else {
+                    if (localMusic.getSong().indexOf('[') != -1) {
+                        localMusic.song = localMusic.getSong().split("\\[")[0];
+                    } else {
+                        localMusic.song = localMusic.getSong().split(".m")[0];
+                    }
+                }
+                localMusic.save();
                 list.add(localMusic);
-                list.size();
             }
             cursor.close();
         }

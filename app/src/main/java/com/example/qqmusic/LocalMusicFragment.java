@@ -3,13 +3,11 @@ package com.example.qqmusic;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +15,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.qqmusic.data.LocalMusic;
+import com.example.qqmusic.data.LocalPlayHistory;
+import com.example.qqmusic.data.PlayHistory;
+
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -42,7 +43,15 @@ public class LocalMusicFragment extends Fragment {
         init(view);
         queryListener();
         exit_iconListener();
+        initLocalMusicRecyclerViewOnCreate();
         return view;
+    }
+
+    private void initLocalMusicRecyclerViewOnCreate() {
+        if (mainActivity.localMusicList.size() != 0) {
+            musicList = mainActivity.localMusicList;
+            initLocalMusicRecyclerView();
+        }
     }
 
     private void initLocalMusicRecyclerView() {
@@ -52,7 +61,7 @@ public class LocalMusicFragment extends Fragment {
                 .OnItemClickListenter() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.d("Lpp", musicList.get(position).toString());
+                playLocalMusic(musicList.get(position));
             }
         });
         getActivity().runOnUiThread(new Runnable() {
@@ -62,6 +71,21 @@ public class LocalMusicFragment extends Fragment {
             }
         });
 
+    }
+
+    private void playLocalMusic(LocalMusic localMusic) {
+        mainActivity.setMusic(localMusic.getPath());
+        mainActivity.setBottomNameAndVersion(localMusic.getSong(),localMusic.getSinger());
+        LitePal.deleteAll(LocalPlayHistory.class);
+        LitePal.deleteAll(PlayHistory.class);
+        LocalPlayHistory localPlayHistory = new LocalPlayHistory();
+        localPlayHistory.setAlbum(localMusic.getAlbum());
+        localPlayHistory.setDuration(localMusic.getDuration());
+        localPlayHistory.setPath(localMusic.getPath());
+        localPlayHistory.setSize(localMusic.getSize());
+        localPlayHistory.setSong(localMusic.getSong());
+        localPlayHistory.setSinger(localMusic.getSinger());
+        localPlayHistory.save();
     }
 
     private void queryListener() {
@@ -87,35 +111,6 @@ public class LocalMusicFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        Log.d("Lpp", "here");
-        switch (requestCode) {
-            case 1:
-                Log.d("Lpp", "three");
-                if (grantResults.length > 0 && grantResults[0] == PackageManager
-                        .PERMISSION_GRANTED) {
-                    if (mainActivity.localMusicList != null && mainActivity.localMusicList.size()
-                            > 0) {
-                        musicList = mainActivity.localMusicList;
-                    } else {
-                        mainActivity.localMusicList = Util.getLocalMusic(getContext());
-                        musicList = mainActivity.localMusicList;
-                    }
-                    initLocalMusicRecyclerView();
-                    Log.d("Lpp", musicList.get(0).toString() + "\n" + musicList.get(1));
-                } else {
-                    Toast.makeText(mainActivity, "You deny the permission", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                Log.d("Lpp", "nere");
-                break;
-        }
-    }
-
     private void exit_iconListener() {
         exit_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +124,6 @@ public class LocalMusicFragment extends Fragment {
             }
         });
     }
-
 
     @Override
     public void onDestroyView() {

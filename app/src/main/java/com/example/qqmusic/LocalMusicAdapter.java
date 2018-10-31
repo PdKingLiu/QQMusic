@@ -1,7 +1,9 @@
 package com.example.qqmusic;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,8 @@ import com.example.qqmusic.data.LocalMusic;
 
 import java.util.List;
 
-public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.ViewHolder> implements View.OnClickListener {
+public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.ViewHolder>
+        implements View.OnClickListener {
 
     private List<LocalMusic> localMusicList;
 
@@ -20,24 +23,27 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
     }
 
     public OnItemClickListenter mOnItemClickListenter;
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout
                 .local_music_item, viewGroup, false);
-        view.setOnClickListener(this);
         ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(this);
         return viewHolder;
     }
+
     public void setOnItemClickListenter(OnItemClickListenter listenter) {
         this.mOnItemClickListenter = listenter;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         LocalMusic localMusic = localMusicList.get(i);
-        String name = localMusic.getSong().split(" -")[1].split("\\[")[0];
-        viewHolder.musicName.setText(name);
+        viewHolder.itemView.setTag(i);
+        viewHolder.musicName.setText(localMusic.getSong());
         viewHolder.musicSingerAndalbum.setText(localMusic.getSinger() + " · " + localMusic
                 .getAlbum());
     }
