@@ -1,5 +1,13 @@
 package com.example.qqmusic;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -43,11 +51,37 @@ public class Util {
         return musicBack;
     }
 
-    public static List<LocalMusic> getLocalMusic() {
+    public static List<LocalMusic> getLocalMusic(Context context) {
+
 
         List<LocalMusic> list = new ArrayList<>();
-        
 
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media
+                        .EXTERNAL_CONTENT_URI, null,
+                null, null, MediaStore.Audio.AudioColumns.IS_MUSIC);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                LocalMusic localMusic = new LocalMusic();
+                localMusic.song = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio
+                        .Media.DISPLAY_NAME));
+                localMusic.singer = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore
+                        .Audio.Media.ARTIST));
+                localMusic.path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio
+                        .Media.DATA));
+                localMusic.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio
+                        .Media.DURATION));
+                localMusic.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio
+                        .Media.SIZE));
+                localMusic.album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio
+                        .Media.ALBUM));
+                list.add(localMusic);
+                list.size();
+            }
+            cursor.close();
+        }
+
+        return list;
     }
 
 }

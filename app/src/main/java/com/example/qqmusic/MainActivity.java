@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.PlayHistory;
 
 import org.litepal.LitePal;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView findText;
     private DrawerLayout mDrawerLayout;
     private List<PlayHistory> mPlayHistoryList;
-    private ImageView localMusic;
+    public List<LocalMusic> localMusicList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        localMusic = findViewById(R.id.local_music);
+        localMusicList = LitePal.findAll(LocalMusic.class);
         drawlayout_pop = findViewById(R.id.menu);
         mDrawerLayout = findViewById(R.id.menu_pop);
         bottom_circleimageview = findViewById(R.id.music_icon);
