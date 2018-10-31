@@ -41,8 +41,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout search_music;
-    private LinearLayout linearLayout;
-    private FrameLayout frameLayout;
+    public LinearLayout linearLayout;
+    public FrameLayout frameLayout;
     private CircleImageView bottom_circleimageview;
     private TextView bottom_musicname;
     private TextView bottom_musicversion;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView findText;
     private DrawerLayout mDrawerLayout;
     private List<PlayHistory> mPlayHistoryList;
+    private ImageView localMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
         LitePal.getDatabase();
         init();
 
-
         statusListener();
         searchListener();
         setMainPagerAdapter();
         popMenuListener();
         initBottomPlay();
     }
+
 
 
 
@@ -291,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
+        localMusic = findViewById(R.id.local_music);
         drawlayout_pop = findViewById(R.id.menu);
         mDrawerLayout = findViewById(R.id.menu_pop);
         bottom_circleimageview = findViewById(R.id.music_icon);

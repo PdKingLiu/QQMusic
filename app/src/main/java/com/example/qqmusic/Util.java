@@ -1,8 +1,13 @@
 package com.example.qqmusic;
 
 import android.util.Log;
+import android.widget.ListView;
 
+import com.example.qqmusic.data.LocalMusic;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -30,12 +35,19 @@ public class Util {
         }).start();
     }
 
-    //解释音乐搜索的
+    //解析音乐搜索的
     public static MusicItem requestDataOfMusicItem(String musicJosn) {
         Gson gson = new Gson();
         MusicItem musicBack = gson.fromJson(musicJosn,
                 MusicItem.class);
         return musicBack;
+    }
+
+    public static List<LocalMusic> getLocalMusic() {
+
+        List<LocalMusic> list = new ArrayList<>();
+        
+
     }
 
 }
