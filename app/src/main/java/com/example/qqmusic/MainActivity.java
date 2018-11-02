@@ -334,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
 
         localMusicList = LitePal.findAll(LocalMusic.class);
-
         drawlayout_pop = findViewById(R.id.menu);
         mDrawerLayout = findViewById(R.id.menu_pop);
         bottom_circleimageview = findViewById(R.id.music_icon);
