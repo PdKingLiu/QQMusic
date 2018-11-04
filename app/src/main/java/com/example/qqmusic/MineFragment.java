@@ -9,9 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class MineFragment extends Fragment {
 
@@ -41,15 +39,13 @@ public class MineFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.layout_apart_framelayout, new
-                        LocalMusicFragment
-                        ());
+                fragmentTransaction.replace(R.id.layout_apart_framelayout,
+                        new LocalMusicFragment());
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 mainActivity.frameLayout.setVisibility(View.VISIBLE);
                 mainActivity.linearLayout.setVisibility(View.GONE);
-
             }
         });
     }

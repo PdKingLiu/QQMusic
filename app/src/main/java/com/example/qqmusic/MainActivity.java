@@ -20,10 +20,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView bottom_musicname;
     private TextView bottom_musicversion;
     private ImageView botton_status;
+    private ImageView more_menu;
     private ImageView drawlayout_pop;
     private MediaPlayer mediaPlayer;
     private FragmentPagerAdapter fragmentPagerAdapter;
@@ -77,13 +82,65 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LitePal.getDatabase();
         init();
-
+        more_menuListener();
         statusListener();
         searchListener();
         setMainPagerAdapter();
         popMenuListener();
         initBottomPlay();
         initLocalBottomPlay();
+    }
+
+    private void more_menuListener() {
+        more_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View view = LayoutInflater.from(getContext()).inflate(R.layout
+                        .mian_popwindow_layout, null, false);
+                LinearLayout linearLayout = view.findViewById(R.id.pop_one);
+                LinearLayout linearLayout2 = view.findViewById(R.id.pop_one);
+                LinearLayout linearLayout3 = view.findViewById(R.id.pop_one);
+                final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams
+                        .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                popupWindow.setTouchable(true);
+                final WindowManager.LayoutParams wl = getWindow().getAttributes();
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        wl.alpha = 1f;
+                        getWindow().setAttributes(wl);
+                    }
+                });
+                popupWindow.showAsDropDown(v);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                wl.alpha = 0.5f;
+                getWindow().setAttributes(wl);
+                linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        wl.alpha = 1f;
+                        getWindow().setAttributes(wl);
+                        popupWindow.dismiss();
+                    }
+                });
+                linearLayout2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        wl.alpha = 1f;
+                        getWindow().setAttributes(wl);
+                        popupWindow.dismiss();
+                    }
+                });
+                linearLayout3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        wl.alpha = 1f;
+                        getWindow().setAttributes(wl);
+                        popupWindow.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     private void initLocalBottomPlay() {
@@ -332,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-
+        more_menu = findViewById(R.id.more);
         localMusicList = LitePal.findAll(LocalMusic.class);
         drawlayout_pop = findViewById(R.id.menu);
         mDrawerLayout = findViewById(R.id.menu_pop);

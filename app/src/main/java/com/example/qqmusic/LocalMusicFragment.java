@@ -3,6 +3,7 @@ package com.example.qqmusic;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -64,7 +65,6 @@ public class LocalMusicFragment extends Fragment {
                         .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 final WindowManager.LayoutParams wl = getActivity().getWindow().getAttributes();
                 popupWindow.setTouchable(true);
-                popupWindow.setTouchable(true);
                 popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
@@ -72,7 +72,6 @@ public class LocalMusicFragment extends Fragment {
                         getActivity().getWindow().setAttributes(wl);
                     }
                 });
-                popupWindow.setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
                 popupWindow.showAsDropDown(v);
                 wl.alpha = 0.5f;
                 getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
