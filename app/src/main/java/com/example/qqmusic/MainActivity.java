@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LitePal.getDatabase();
         init();
+        startMusicService();
         more_menuListener();
         statusListener();
         searchListener();
@@ -89,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         popMenuListener();
         initBottomPlay();
         initLocalBottomPlay();
+    }
+
+    private void startMusicService() {
+
     }
 
     private void more_menuListener() {

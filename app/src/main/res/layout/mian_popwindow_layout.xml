@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:id="@+id/pop_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,8 +20,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="17dp"
-                android:layout_height="17dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/find_music_by_song" />
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="听歌识曲"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
 
         </LinearLayout>
@@ -41,7 +41,7 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:id="@+id/pop_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +49,8 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="17dp"
-                android:layout_height="17dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/scan_main" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="扫一扫　"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <View
@@ -68,15 +68,15 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="17dp"
-                android:layout_height="17dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/video_picture" />
 
             <TextView
@@ -85,7 +85,7 @@
                 android:layout_marginLeft="10dp"
                 android:text="视频海报"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
 
