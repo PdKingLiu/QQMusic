@@ -2,13 +2,13 @@ package com.example.qqmusic;
 
 public interface DownloadListener {
 
-    public void onProgress(int progress);
+    void onProgress(int progress);
 
-    public void onSuccess();
+    void onSuccess();
 
-    public void onFailed();
+    void onFailed();
 
-    public void onPaused();
+    void onPaused();
 
-    public void onCandeled();
+    void onCandeled();
 }
