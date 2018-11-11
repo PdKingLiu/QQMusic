@@ -2,9 +2,11 @@ package com.example.qqmusic;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,21 +21,40 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
 
     private List<MusicItem.DataBean.SongBean.ListBean> list;
 
-    private OnItemClickListenter mOnItemClickListenter = null;
+    private OnMusicItemClickListener mOnMusicItemClickListener = null;
+
+    private OnDownloadClickListener mOnDownloadClickListener = null;
+
 
     @Override
     public void onClick(View v) {
-        if (mOnItemClickListenter != null) {
-            mOnItemClickListenter.onItemClick(v, (int) v.getTag());
+        View vvv = (View) v.getParent();
+        switch (v.getId()) {
+            case R.id.group_item:
+                mOnMusicItemClickListener.onMusicItemClick(v, (int) vvv.getTag());
+                break;
+            case R.id.music_icon:
+                Log.d("Lpp", "onClick: ");
+                mOnDownloadClickListener.onDownloadItemClick(vvv, (int) vvv.getTag());
+                break;
+            default:
+                break;
         }
+
     }
 
-    public static interface OnItemClickListenter {
-        void onItemClick(View view, int position);
+    public static interface OnMusicItemClickListener {
+        void onMusicItemClick(View view, int position);
     }
 
-    public void setOnItemClickListenter(OnItemClickListenter listenter) {
-        this.mOnItemClickListenter = listenter;
+    public static interface OnDownloadClickListener {
+        void onDownloadItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnMusicItemClickListener onMusicItemClickListener,
+                                       OnDownloadClickListener onDownloadClickListener) {
+        this.mOnMusicItemClickListener = onMusicItemClickListener;
+        this.mOnDownloadClickListener = onDownloadClickListener;
     }
 
 
@@ -43,7 +64,11 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout
                 .music_item_layout, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
-        view.setOnClickListener(this);
+        LinearLayout linearLayout = view.findViewById(R.id.group_item);
+        ImageView music_icon = view.findViewById(R.id.music_icon);
+//        view.setOnClickListener(this);
+        music_icon.setOnClickListener(this);
+        linearLayout.setOnClickListener(this);
         return holder;
     }
 
@@ -71,7 +96,6 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
-
 
             music_name = itemView.findViewById(R.id.music_name);
 

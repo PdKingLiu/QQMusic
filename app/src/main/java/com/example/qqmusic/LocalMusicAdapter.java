@@ -55,9 +55,9 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
 
     @Override
     public void onClick(View v) {
-        if (mOnItemClickListenter != null) {
-            mOnItemClickListenter.onItemClick(v, (int) v.getTag());
-        }
+        Log.d("Lpp", "" + v.getId());
+        Log.d("Lpp", "" + v.getTag());
+        mOnItemClickListenter.onItemClick(v, (int) v.getTag());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

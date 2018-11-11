@@ -1,14 +1,23 @@
 package com.example.qqmusic;
 
+import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -28,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +73,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.example.qqmusic.Final_music.MUSIC_DOWNLOAD_URL;
 
 
 public class SearchFragment extends Fragment {
@@ -109,13 +120,12 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+
     //历史记录监听点击
     private void search_historyListener() {
         search_history.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Lpp===", position + "");
-                Log.d("Lpp===", historyList.getItem(position) + "");
                 String s = historyList.getItem(position);
                 input_string = s;
                 search_edit.setText(input_string);
@@ -218,7 +228,7 @@ public class SearchFragment extends Fragment {
 
     private void initHistoryAdapter() {
         searchHistories = LitePal.findAll(SearchHistory.class);
-        Log.d("Lpp++", searchHistories == null ? "null" : search_history.toString());
+//        Log.d("Lpp++", searchHistories == null ? "null" : search_history.toString());
         List<String> list = new ArrayList<>();
         historyList = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
                 list);
@@ -232,6 +242,7 @@ public class SearchFragment extends Fragment {
             search_history.setAdapter(historyList);
         }
     }
+
 
     //监听输入
     private void inputListener() {
@@ -337,16 +348,49 @@ public class SearchFragment extends Fragment {
     }
 
 
+    private DownloadService.DownloadBinder downloadBinder;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            downloadBinder = (DownloadService.DownloadBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     // 监听recycleView 点击
     private void recyclerViewListener() {
-        musicItemAdapter.setOnItemClickListenter(new MusicItemAdapter.OnItemClickListenter() {
+        musicItemAdapter.setOnItemClickListener(new MusicItemAdapter.OnMusicItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onMusicItemClick(View view, int position) {
                 listBean = adapterList.get(position);
                 requestMusic(listBean);
             }
+        }, new MusicItemAdapter.OnDownloadClickListener() {
+            @Override
+            public void onDownloadItemClick(View view, int position) {
+                ((MainActivity)getActivity()).startDownload();
+//            PopupWindow popupWindow = new PopupWindow();
+                Log.d("Lpp", "onDownloadIt   emClick: ");
+
+
+            }
         });
     }
+
+
+   /* new MusicItemAdapter.OnItemClickListenter() {
+        @Override
+        public void onItemClick(View view, int position) {
+            listBean = adapterList.get(position);
+            requestMusic(listBean);
+        }
+    }*/
+
 
     // 监听刷新
     private void reflushListener() {

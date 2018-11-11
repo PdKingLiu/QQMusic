@@ -11,6 +11,10 @@ public class Final_music {
 
     static String MUSIC_DOWNLOAD_URL = "http://www.170mv.com/kw/other.web.ra01.sycdn.kuwo" +
             ".cn/resource/n1/128/8/62/3286845604.mp3";
+
+//    static String MUSIC_DOWNLOAD_URL = "http://101.96.8.156/ftp.yz.yamagata-u.ac" +
+//            ".jp/pub/eclipse/oomph/epp/2018-09/Ra/eclipse-inst-win64.exe";
+
     //下载音乐的接口
     static String music_url_front = "http://ws.stream.qqmusic.qq.com/C100";
 

@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class DownloadService extends Service {
+ public class DownloadService extends Service {
 
     private DownloadTask downloadTask;
 
@@ -28,7 +28,7 @@ public class DownloadService extends Service {
     private DownloadListener downloadListener = new DownloadListener() {
         @Override
         public void onProgress(int progress) {
-
+            getNotificationManager().notify(1, getNotification("Downloading...", progress));
         }
 
         @Override
@@ -116,7 +116,7 @@ public class DownloadService extends Service {
         builder.setContentTitle(title);
         if (progress >= 0) {
             builder.setContentText(progress + "%");
-            builder.setProgress(100, progress, true);
+            builder.setProgress(100, progress, false);
         }
         return builder.build();
     }
