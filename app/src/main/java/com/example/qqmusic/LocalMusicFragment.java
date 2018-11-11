@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,11 @@ public class LocalMusicFragment extends Fragment {
     PopupWindow popupWindow;
     RecyclerView localMusicRecyclerView;
     private LocalMusicAdapter localMusicRecyclerViewAdapter;
-    private TextView scan_local_music;
+    private LinearLayout scan_local_music;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_local_music, container, false);
 
         init(view);
@@ -60,7 +60,7 @@ public class LocalMusicFragment extends Fragment {
             public void onClick(View v) {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.popwindow, null,
                         false);
-                scan_local_music = view.findViewById(R.id.scan_local_music);
+                scan_local_music = view.findViewById(R.id.pop_two);
                 popupWindow = new PopupWindow(view, ViewGroup.LayoutParams
                         .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
                 final WindowManager.LayoutParams wl = getActivity().getWindow().getAttributes();
@@ -79,28 +79,19 @@ public class LocalMusicFragment extends Fragment {
                 scan_local_music.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission
-                                .READ_EXTERNAL_STORAGE)
-                                != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest
-                                    .permission.READ_EXTERNAL_STORAGE}, 1);
-                            wl.alpha = 1f;
-                            getActivity().getWindow().setAttributes(wl);
-                            popupWindow.dismiss();
+                        if (mainActivity.localMusicList != null && mainActivity
+                                .localMusicList.size()
+                                > 0) {
+                            musicList = mainActivity.localMusicList;
                         } else {
-                            if (mainActivity.localMusicList != null && mainActivity
-                                    .localMusicList.size()
-                                    > 0) {
-                                musicList = mainActivity.localMusicList;
-                            } else {
-                                mainActivity.localMusicList = Util.getLocalMusic(getContext());
-                                musicList = mainActivity.localMusicList;
-                            }
-                            popupWindow.dismiss();
-                            wl.alpha = 1f;
-                            getActivity().getWindow().setAttributes(wl);
-                            initLocalMusicRecyclerView();
+                            mainActivity.localMusicList = Util.getLocalMusic(getContext());
+                            musicList = mainActivity.localMusicList;
+                            musicList.size();
                         }
+                        popupWindow.dismiss();
+                        wl.alpha = 1f;
+                        getActivity().getWindow().setAttributes(wl);
+                        initLocalMusicRecyclerView();
                     }
                 });
             }

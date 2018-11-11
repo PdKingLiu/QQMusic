@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="扫一扫　"
+            android:text="扫描本地音乐"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
     </LinearLayout>
