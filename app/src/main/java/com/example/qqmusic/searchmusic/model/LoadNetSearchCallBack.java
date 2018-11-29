@@ -1,8 +1,8 @@
 package com.example.qqmusic.searchmusic.model;
 
-public interface LoadTaskCallBack<T> {
+public interface LoadNetSearchCallBack<T> {
 
-    void onSuccess(T t);
+    void onNetSearchSuccess(T t);
 
     void onStart();
 

@@ -40,6 +40,9 @@ import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
 import com.example.qqmusic.searchmusic.DownloadService;
+import com.example.qqmusic.searchmusic.model.ModelTask;
+import com.example.qqmusic.searchmusic.presenter.SearchMusicPresenter;
+import com.example.qqmusic.searchmusic.view.SearchFragment;
 
 import org.litepal.LitePal;
 
@@ -329,10 +332,14 @@ public class MainActivity extends AppCompatActivity {
         search_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SearchFragment searchFragment = new SearchFragment();
+                ModelTask modelTask = ModelTask.getInstance();
+                SearchMusicPresenter searchMusicPresenter = new SearchMusicPresenter
+                        (searchFragment, modelTask);
+                searchFragment.setPresenter(searchMusicPresenter);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.layout_apart_framelayout, new SearchFragment
-                        ());
+                fragmentTransaction.replace(R.id.layout_apart_framelayout,searchFragment );
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();

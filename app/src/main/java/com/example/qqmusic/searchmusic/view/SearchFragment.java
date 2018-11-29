@@ -1,6 +1,8 @@
 package com.example.qqmusic.searchmusic.view;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -86,8 +88,21 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
     private LinearLayout search_success;
     private TextView cleanHistory;
     private SearchMusicInterfaceContent.Presenter mPresenter;
-
     MainActivity mainActivity;
+
+
+    //专辑图片url
+
+    public static String MUSIC_ICON_FRONT = "http://y.gtimg.cn/music/photo_new/T002R300x300M000";
+
+    public static String MUSIC_ICON_REAR = ".jpg?max_age=2592000";
+
+    //播放音乐的接口
+
+    public static String MUSIC_PLAY_FRONT = "http://ws.stream.qqmusic.qq.com/C100";
+
+    public static String MUSIC_PLAY_REAR = ".m4a?fromtag=0&guid=126548448";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,11 +118,11 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         mainActivity = (MainActivity) getActivity();
         LitePal.getDatabase();
         cleanListener();
-        editIsEmplyListener();
+        editIsEmptyListener();
         initHistoryAdapter();
         inputListener();
         listenerImage();
-        reflushListener();
+        refreshListener();
         search_historyListener();
         return view;
     }
@@ -126,6 +141,7 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         });
     }
 
+
     //通过历史item点击搜索
     private void searchMusicByItemClick(String input_string) {
         if (historyList != null) {
@@ -141,45 +157,18 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
                 sh.save();
                 searchHistories.add(sh);
                 historyList.add(input_string);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        changLayout("history_GONE");
-                        historyList.notifyDataSetChanged();
-                    }
-                });
+                changLayout("history_GONE");
+                historyList.notifyDataSetChanged();
             } else {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        changLayout("history_GONE");
-                    }
-                });
+                changLayout("history_GONE");
             }
         }
-        Util.sendRequest(input_string, ++flag, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws
-                    IOException {
-
-                changLayout("success_VISIBLE");
-                String result = response.body().string();
-                MusicItem musicItem = Util.requestDataOfMusicItem(result);
-                changeListView(musicItem);
-            }
-        });
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
-                .getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        mPresenter.getMusicList(input_string, ++flag);
 
     }
 
 
-    private void editIsEmplyListener() {
+    private void editIsEmptyListener() {
         search_edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -205,26 +194,21 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         cleanHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LitePal.deleteAll(SearchHistory.class);
+                mPresenter.deleteAllSearchHistory();
                 changLayout("history_GONE");
                 historyList.clear();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        historyList.notifyDataSetChanged();
-                    }
-                });
+                historyList.notifyDataSetChanged();
             }
         });
     }
 
     private void initHistoryAdapter() {
+        mPresenter.getAllSearchHistory();
         searchHistories = LitePal.findAll(SearchHistory.class);
-//        Log.d("Lpp++", searchHistories == null ? "null" : search_history.toString());
         List<String> list = new ArrayList<>();
         historyList = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
                 list);
-        if (searchHistories.size() == 0) {
+        if (searchHistories != null && searchHistories.size() == 0) {
             search_history.setAdapter(historyList);
             changLayout("history_GONE");
         } else {
@@ -258,43 +242,14 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
                                 sh.save();
                                 searchHistories.add(sh);
                                 historyList.add(input_string);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        changLayout("history_GONE");
-                                        historyList.notifyDataSetChanged();
-                                    }
-                                });
+                                changLayout("history_GONE");
+                                historyList.notifyDataSetChanged();
                             } else {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        changLayout("history_GONE");
-                                    }
-                                });
+                                changLayout("history_GONE");
                             }
                         }
                         mPresenter.getMusicList(input_string, ++flag);
-                        Util.sendRequest(input_string, ++flag, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                            }
 
-                            @Override
-                            public void onResponse(Call call, Response response) throws
-                                    IOException {
-
-                                changLayout("success_VISIBLE");
-                                String result = response.body().string();
-                                MusicItem musicItem = Util.requestDataOfMusicItem(result);
-                                changeListView(musicItem);
-                            }
-                        });
-
-                        // 点击搜索后隐藏输入法
-                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
-                                .getSystemService(INPUT_METHOD_SERVICE);
-                        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                     }
 
                 }
@@ -325,21 +280,6 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         });
     }
 
-    //加载歌曲菜单
-    private void changeListView(final MusicItem musicItem) {
-        adapterList = musicItem.data.song.list;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                musicItemAdapter = new MusicItemAdapter(adapterList);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                music_list_recyclerview.setLayoutManager(layoutManager);
-                music_list_recyclerview.setAdapter(musicItemAdapter);
-                recyclerViewListener();
-            }
-        });
-    }
-
 
     private DownloadService.DownloadBinder downloadBinder;
 
@@ -361,30 +301,19 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
             @Override
             public void onMusicItemClick(View view, int position) {
                 listBean = adapterList.get(position);
-                requestMusic(listBean);
+                playMusic(listBean);
             }
         }, new MusicItemAdapter.OnDownloadClickListener() {
             @Override
             public void onDownloadItemClick(View view, int position) {
                 ((MainActivity) getActivity()).startDownload();
-//            PopupWindow popupWindow = new PopupWindow();
-
             }
         });
     }
 
 
-   /* new MusicItemAdapter.OnItemClickListenter() {
-        @Override
-        public void onItemClick(View view, int position) {
-            listBean = adapterList.get(position);
-            requestMusic(listBean);
-        }
-    }*/
-
-
     // 监听刷新
-    private void reflushListener() {
+    private void refreshListener() {
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
@@ -420,55 +349,23 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
     }
 
 
-    public void requestMusic(final MusicItem.DataBean.SongBean.ListBean listBean) {
+    public void playMusic(final MusicItem.DataBean.SongBean.ListBean listBean) {
 
-        final String icon_url = Final_music.music_icon_front
+        final String icon_url = MUSIC_ICON_FRONT
                 + listBean.album.mid
-                + Final_music.music_icon_rear;
+                + MUSIC_ICON_REAR;
 
-        final String music_url = Final_music.music_url_front
+        final String music_url = MUSIC_PLAY_FRONT
                 + listBean.file.mediaMid
-                + Final_music.music_url_rear;
+                + MUSIC_PLAY_REAR;
 
         mainActivity.setMusicVersionIcon(icon_url);
-        mainActivity.setBottomNameAndVersion(listBean.title,
-                listBean.singer.get(0).name);
+        mainActivity.setBottomNameAndVersion(listBean.title, listBean.singer.get(0).name);
         mainActivity.setMusic(music_url);
 
-        saveMusicPlayHistory(icon_url, music_url, listBean.title,
+        mPresenter.deleteAllPlayHistory();
+        mPresenter.saveLastPlay(getContext(), icon_url, music_url, listBean.title,
                 listBean.singer.get(0).name);
-    }
-
-    //      将最近的一次播放历史存进数据库
-    private void saveMusicPlayHistory(final String icon_url, final String music_url, final String
-            title, final String name) {
-        LitePal.deleteAll(PlayHistory.class);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Glide.with(mainActivity).load(icon_url).into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition
-                            <? super Drawable> transition) {
-                        BitmapDrawable bitmapDrawable = (BitmapDrawable) resource;
-                        Bitmap bitmap = bitmapDrawable.getBitmap();
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                        byte[] bytes = bos.toByteArray();
-                        PlayHistory playHistory = new PlayHistory(bytes, icon_url, music_url,
-                                title, name);
-                        playHistory.save();
-                    }
-                });
-            }
-        });
-    /*    BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-        byte[] bytes = bos.toByteArray();
-        PlayHistory playHistory = new PlayHistory(bytes, icon_url, music_url, title, name);
-        playHistory.save();*/
     }
 
 
@@ -477,15 +374,7 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         exit_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (getActivity().getWindow().getAttributes().softInputMode == WindowManager
-                        .LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
-                    Log.d("hehehe", "onClick: hhhh");
-                }
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
-                        .getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);*/
-                LinearLayout linearLayout = getActivity().findViewById(R.id
-                        .layout_apart_linearlayout);
+                LinearLayout linearLayout = getActivity().findViewById(R.id.layout_apart_linearlayout);
                 FrameLayout frameLayout = getActivity().findViewById(R.id.layout_apart_framelayout);
                 frameLayout.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.VISIBLE);
@@ -502,6 +391,7 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView(View view) {
+        mDialog = new ProgressDialog(getContext());
         exit_search = view.findViewById(R.id.exit_search);
         speak_search = view.findViewById(R.id.search_speak);
         search_edit = view.findViewById(R.id.search_input);
@@ -531,13 +421,28 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
 
 
     @Override
+    public void setLocalPlay(PlayHistory play) {
+
+    }
+
+    @Override
+    public void setLocalHistoryList(List<SearchHistory> localHistoryList) {
+        searchHistories = localHistoryList;
+    }
+
+    @Override
     public void setMusicList(MusicItem musicList) {
+        changLayout("success_VISIBLE");
         adapterList = musicList.data.song.list;
         musicItemAdapter = new MusicItemAdapter(adapterList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         music_list_recyclerview.setLayoutManager(layoutManager);
         music_list_recyclerview.setAdapter(musicItemAdapter);
         recyclerViewListener();
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+                .getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
     }
 
     @Override
@@ -564,10 +469,6 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         return isAdded();
     }
 
-    @Override
-    public void setPresenter(SearchMusicInterfaceContent.Presenter presenter) {
-        mPresenter = presenter;
-    }
 
     @Override
     public void onClick(View v) {
@@ -575,4 +476,8 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
         }
     }
 
+    @Override
+    public void setPresenter(SearchMusicInterfaceContent.Presenter presenter) {
+        mPresenter = presenter;
+    }
 }

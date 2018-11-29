@@ -1,4 +1,4 @@
-package com.example.qqmusic.searchmusic;
+package com.example.qqmusic;
 
 public interface BaseView<T> {
 
