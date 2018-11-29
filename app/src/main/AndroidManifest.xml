@@ -25,7 +25,7 @@
         </activity>
 
         <service
-            android:name=".DownloadService"
+            android:name=".searchmusic.DownloadService"
             android:enabled="true"
             android:exported="true"></service>
     </application>

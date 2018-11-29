@@ -1,5 +1,6 @@
-package com.example.qqmusic;
+package com.example.qqmusic.searchmusic.view;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -36,9 +37,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.qqmusic.data.PlayHistory;
 import com.example.qqmusic.searchmusic.DownloadService;
+import com.example.qqmusic.Final_music;
+import com.example.qqmusic.MainActivity;
+import com.example.qqmusic.MusicItem;
+import com.example.qqmusic.MusicItemAdapter;
+import com.example.qqmusic.R;
+import com.example.qqmusic.Util;
+import com.example.qqmusic.data.PlayHistory;
 import com.example.qqmusic.searchmusic.javabean.SearchHistory;
+import com.example.qqmusic.searchmusic.presenter.SearchMusicInterfaceContent;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -57,8 +65,10 @@ import okhttp3.Response;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements SearchMusicInterfaceContent.View, View
+        .OnClickListener {
 
+    private Dialog mDialog;
     private ImageView exit_search;
     private ImageView speak_search;
     private EditText search_edit;
@@ -75,6 +85,7 @@ public class SearchFragment extends Fragment {
     private LinearLayout history_view;
     private LinearLayout search_success;
     private TextView cleanHistory;
+    private SearchMusicInterfaceContent.Presenter mPresenter;
 
     MainActivity mainActivity;
 
@@ -247,8 +258,6 @@ public class SearchFragment extends Fragment {
                                 sh.save();
                                 searchHistories.add(sh);
                                 historyList.add(input_string);
-                                Log.d("LppThread", "Thread "+ Thread.currentThread().getName());
-
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -265,6 +274,7 @@ public class SearchFragment extends Fragment {
                                 });
                             }
                         }
+                        mPresenter.getMusicList(input_string, ++flag);
                         Util.sendRequest(input_string, ++flag, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
@@ -356,10 +366,8 @@ public class SearchFragment extends Fragment {
         }, new MusicItemAdapter.OnDownloadClickListener() {
             @Override
             public void onDownloadItemClick(View view, int position) {
-                ((MainActivity)getActivity()).startDownload();
+                ((MainActivity) getActivity()).startDownload();
 //            PopupWindow popupWindow = new PopupWindow();
-                Log.d("Lpp", "onDownloadIt   emClick: ");
-
 
             }
         });
@@ -519,6 +527,52 @@ public class SearchFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+
+    @Override
+    public void setMusicList(MusicItem musicList) {
+        adapterList = musicList.data.song.list;
+        musicItemAdapter = new MusicItemAdapter(adapterList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        music_list_recyclerview.setLayoutManager(layoutManager);
+        music_list_recyclerview.setAdapter(musicItemAdapter);
+        recyclerViewListener();
+    }
+
+    @Override
+    public void showLoading() {
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mDialog.isShowing()) {
+            mDialog.hide();
+        }
+    }
+
+    @Override
+    public void showError() {
+        Toast.makeText(getContext(), "网络错误", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void setPresenter(SearchMusicInterfaceContent.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        }
     }
 
 }

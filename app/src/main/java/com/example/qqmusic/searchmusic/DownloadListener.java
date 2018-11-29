@@ -1,4 +1,4 @@
-package com.example.qqmusic;
+package com.example.qqmusic.searchmusic;
 
 public interface DownloadListener {
 

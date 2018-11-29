@@ -2,7 +2,6 @@ package com.example.qqmusic;
 
 import android.Manifest;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -23,7 +22,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,15 +39,10 @@ import com.bumptech.glide.Glide;
 import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
+import com.example.qqmusic.searchmusic.DownloadService;
 
 import org.litepal.LitePal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

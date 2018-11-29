@@ -1,4 +1,4 @@
-package com.example.qqmusic.data;
+package com.example.qqmusic.searchmusic.javabean;
 
 import org.litepal.crud.LitePalSupport;
 

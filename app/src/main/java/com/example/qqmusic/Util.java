@@ -53,7 +53,6 @@ public class Util {
 
     public static List<LocalMusic> getLocalMusic(Context context) {
 
-
         List<LocalMusic> list = new ArrayList<>();
 
 

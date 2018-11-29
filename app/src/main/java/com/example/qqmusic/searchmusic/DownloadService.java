@@ -1,19 +1,19 @@
-package com.example.qqmusic;
+package com.example.qqmusic.searchmusic;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+
+import com.example.qqmusic.MainActivity;
+import com.example.qqmusic.R;
 
 import java.io.File;
 
@@ -61,7 +61,7 @@ import java.io.File;
         }
     };
 
-    class DownloadBinder extends Binder {
+   public class DownloadBinder extends Binder {
         public void startDownloadTask(String url) {
             if (downloadTask == null) {
                 downloadurl = url;
