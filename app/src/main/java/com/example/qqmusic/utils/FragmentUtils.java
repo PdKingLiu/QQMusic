@@ -10,7 +10,7 @@ public class FragmentUtils {
     public static void replaceFragment(int Rid, FragmentManager fragmentManager, Fragment
             fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(Rid,fragment );
+        fragmentTransaction.replace(Rid, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

@@ -22,6 +22,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     private List<PlayHistory> mPlayHistoryList;
     public List<LocalMusic> localMusicList;
     public List<LocalPlayHistory> mLocalPlayHistoryList;
+    public MineFragment mineFragment;
+    public MusicRoomFragment musicRoomFragment;
+    public FindFragment findFragment;
 
     private DownloadService.DownloadBinder downloadBinder;
 
@@ -106,15 +110,16 @@ public class MainActivity extends AppCompatActivity {
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         LitePal.getDatabase();
         init();
+        initBottomPlay();
+        initLocalBottomPlay();
         startMusicService();
         more_menuListener();
         statusListener();
         searchListener();
         setMainPagerAdapter();
         popMenuListener();
-        initBottomPlay();
-        initLocalBottomPlay();
     }
+
 
     private void checkPermission() {
         String[] permissions = {Manifest.permission
@@ -240,9 +245,9 @@ public class MainActivity extends AppCompatActivity {
 
     //      创建主界面的adapter
     private void setMainPagerAdapter() {
-        final MineFragment mineFragment = new MineFragment();
-        MusicRoomFragment musicRoomFragment = new MusicRoomFragment();
-        FindFragment findFragment = new FindFragment();
+        mineFragment = new MineFragment();
+        musicRoomFragment = new MusicRoomFragment();
+        findFragment = new FindFragment();
         adapterList.add(mineFragment);
         adapterList.add(musicRoomFragment);
         adapterList.add(findFragment);

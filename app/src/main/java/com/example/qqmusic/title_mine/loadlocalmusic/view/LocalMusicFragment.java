@@ -1,9 +1,11 @@
 package com.example.qqmusic.title_mine.loadlocalmusic.view;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
 import com.example.qqmusic.title_mine.loadlocalmusic.adapter.LocalMusicAdapter;
+import com.example.qqmusic.title_mine.view.MineFragment;
 
 import org.litepal.LitePal;
 
@@ -162,7 +165,6 @@ public class LocalMusicFragment extends Fragment implements InterfaceContract.Vi
         localMusicRecyclerView = view.findViewById(R.id.local_recyclerView);
         exit_icon = view.findViewById(R.id.exit_search);
         mainActivity = (MainActivity) getActivity();
-
     }
 
     @Override
@@ -189,9 +191,14 @@ public class LocalMusicFragment extends Fragment implements InterfaceContract.Vi
         }
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void localMusicLoadSucceed(List<LocalMusic> localMusics) {
         musicList = localMusics;
+        ((MainActivity) getActivity()).localMusicList = localMusics;
+        if (musicList != null) {
+            ((MainActivity) getActivity()).mineFragment.setIconNum(1, musicList.size());
+        }
     }
 
     @Override
