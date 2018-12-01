@@ -46,6 +46,7 @@ import com.example.qqmusic.search.DownloadService;
 import com.example.qqmusic.search.model.ModelTask;
 import com.example.qqmusic.search.presenter.SearchMusicPresenter;
 import com.example.qqmusic.search.view.SearchFragment;
+import com.example.qqmusic.utils.FragmentUtils;
 
 import org.litepal.LitePal;
 
@@ -340,12 +341,8 @@ public class MainActivity extends AppCompatActivity {
                 SearchMusicPresenter searchMusicPresenter = new SearchMusicPresenter
                         (searchFragment, modelTask);
                 searchFragment.setPresenter(searchMusicPresenter);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.layout_apart_framelayout,searchFragment );
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                FragmentUtils.replaceFragment(R.id.layout_apart_framelayout,
+                        getSupportFragmentManager(), searchFragment);
                 frameLayout.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.GONE);
             }

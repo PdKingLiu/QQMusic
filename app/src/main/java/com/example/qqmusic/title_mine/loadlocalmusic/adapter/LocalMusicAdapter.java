@@ -56,8 +56,6 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
 
     @Override
     public void onClick(View v) {
-        Log.d("Lpp", "" + v.getId());
-        Log.d("Lpp", "" + v.getTag());
         mOnItemClickListenter.onItemClick(v, (int) v.getTag());
     }
 

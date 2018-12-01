@@ -427,7 +427,6 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
     @Override
     public void showLoading() {
         if (!mDialog.isShowing()) {
-            Log.d("Lpp", "Thread2 + " + Thread.currentThread().getName() + "--");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -440,7 +439,6 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
     @Override
     public void hideLoading() {
         if (mDialog.isShowing()) {
-            Log.d("Lpp", "Thread2 + " + Thread.currentThread().getName() + "--");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

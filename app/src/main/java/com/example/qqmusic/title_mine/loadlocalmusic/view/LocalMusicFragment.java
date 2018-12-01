@@ -1,9 +1,12 @@
 package com.example.qqmusic.title_mine.loadlocalmusic.view;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,7 @@ import android.widget.PopupWindow;
 
 import com.example.qqmusic.MainActivity;
 import com.example.qqmusic.R;
-import com.example.qqmusic.utils.Util;
+import com.example.qqmusic.title_mine.loadlocalmusic.presenter.InterfaceContract;
 import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
@@ -26,8 +29,10 @@ import org.litepal.LitePal;
 import java.util.List;
 
 
-public class LocalMusicFragment extends Fragment {
+public class LocalMusicFragment extends Fragment implements InterfaceContract.View {
 
+
+    private Dialog mDialog;
     private ImageView music_icon;
     private MainActivity mainActivity;
     private ImageView exit_icon;
@@ -36,12 +41,12 @@ public class LocalMusicFragment extends Fragment {
     RecyclerView localMusicRecyclerView;
     private LocalMusicAdapter localMusicRecyclerViewAdapter;
     private LinearLayout scan_local_music;
+    private InterfaceContract.Presenter mPresenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_local_music, container, false);
-
         init(view);
         music_iconListener();
         exit_iconListener();
@@ -74,18 +79,10 @@ public class LocalMusicFragment extends Fragment {
                 scan_local_music.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mainActivity.localMusicList != null && mainActivity
-                                .localMusicList.size()
-                                > 0) {
-                            musicList = mainActivity.localMusicList;
-                        } else {
-                            mainActivity.localMusicList = Util.getLocalMusic(getContext());
-                            musicList = mainActivity.localMusicList;
-                            musicList.size();
-                        }
                         popupWindow.dismiss();
                         wl.alpha = 1f;
                         getActivity().getWindow().setAttributes(wl);
+                        mPresenter.getLocalMusic(getContext());
                         initLocalMusicRecyclerView();
                     }
                 });
@@ -122,8 +119,8 @@ public class LocalMusicFragment extends Fragment {
     private void playLocalMusic(LocalMusic localMusic) {
         mainActivity.setMusic(localMusic.getPath());
         mainActivity.setBottomNameAndVersion(localMusic.getSong(), localMusic.getSinger());
-        LitePal.deleteAll(LocalPlayHistory.class);
-        LitePal.deleteAll(PlayHistory.class);
+        mPresenter.deleteAllLocalPlayHistory();
+        mPresenter.deleteAllPlayHistory();
         LocalPlayHistory localPlayHistory = new LocalPlayHistory();
         localPlayHistory.setAlbum(localMusic.getAlbum());
         localPlayHistory.setDuration(localMusic.getDuration());
@@ -131,7 +128,7 @@ public class LocalMusicFragment extends Fragment {
         localPlayHistory.setSize(localMusic.getSize());
         localPlayHistory.setSong(localMusic.getSong());
         localPlayHistory.setSinger(localMusic.getSinger());
-        localPlayHistory.save();
+        mPresenter.saveLocalPlayHistory(localPlayHistory);
     }
 
 
@@ -160,6 +157,7 @@ public class LocalMusicFragment extends Fragment {
 
 
     private void init(View view) {
+        mDialog = new ProgressDialog(getActivity());
         music_icon = view.findViewById(R.id.music_icon);
         localMusicRecyclerView = view.findViewById(R.id.local_recyclerView);
         exit_icon = view.findViewById(R.id.exit_search);
@@ -167,4 +165,37 @@ public class LocalMusicFragment extends Fragment {
 
     }
 
+    @Override
+    public void showLoading() {
+        if (mDialog != null && !mDialog.isShowing()) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mDialog.show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.hide();
+        }
+    }
+
+    @Override
+    public void localMusicLoadSucceed(List<LocalMusic> localMusics) {
+        musicList = localMusics;
+    }
+
+    @Override
+    public void setPresenter(InterfaceContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
 }

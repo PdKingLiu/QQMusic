@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.qqmusic.title_mine.loadlocalmusic.model.LocalMusicModel;
+import com.example.qqmusic.title_mine.loadlocalmusic.presenter.LocalMusicPresenter;
 import com.example.qqmusic.title_mine.loadlocalmusic.view.LocalMusicFragment;
 import com.example.qqmusic.MainActivity;
 import com.example.qqmusic.R;
+import com.example.qqmusic.utils.FragmentUtils;
 
 public class MineFragment extends Fragment {
 
@@ -41,13 +44,13 @@ public class MineFragment extends Fragment {
         localMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.layout_apart_framelayout,
-                        new LocalMusicFragment());
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                LocalMusicModel localMusicModel = LocalMusicModel.getINSTANCE();
+                LocalMusicFragment fragment = new LocalMusicFragment();
+                LocalMusicPresenter localMusicPresenter = new LocalMusicPresenter
+                        (localMusicModel, fragment);
+                fragment.setPresenter(localMusicPresenter);
+                FragmentUtils.replaceFragment(R.id.layout_apart_framelayout, getActivity()
+                        .getSupportFragmentManager(), fragment);
                 mainActivity.frameLayout.setVisibility(View.VISIBLE);
                 mainActivity.linearLayout.setVisibility(View.GONE);
             }

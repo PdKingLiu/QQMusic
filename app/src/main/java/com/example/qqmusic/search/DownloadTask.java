@@ -51,9 +51,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
             if (file.exists()) {
                 downloadedLength = file.length();
             }
-            Log.d("Lpp", ""+downloadedLength);
             long contentLength = getContentLength(downloadUrl);
-            Log.d("Lpp", ""+contentLength);
             if (contentLength == 0) {
                 return TYPE_FAILED;
             } else if (contentLength == downloadedLength) {
@@ -63,21 +61,15 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
             Request request = new Request.Builder().url(downloadUrl).addHeader("RANGE", "bytes="
                     + downloadedLength + "-").build();
             Response response = okHttpClient.newCall(request).execute();
-//            Log.d("Lpp", "here");
             if (response != null) {
-                Log.d("Lpp", "here");
                 inputStream = response.body().byteStream();
-                Log.d("Lpp", "here");
 
                 saveFile = new RandomAccessFile(file, "rw");
                 saveFile.seek(downloadedLength);
                 byte[] b = new byte[1024];
                 int sum = 0;
                 int len;
-                Log.d("Lpp", "hereeeeee");
-
                 while ((len = inputStream.read(b)) != -1) {
-                    Log.d("Lpp", ""+len);
                     if (isCanceled) {
                         return TYPE_CANCELED;
                     } else if (isPaused) {
@@ -87,7 +79,6 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                     }
                     saveFile.write(b);
                     int progress = (int) ((100 * (sum + downloadedLength)) / contentLength);
-                    Log.d("Lpp", ""+progress);
                     publishProgress(progress);
                 }
                 response.body().close();

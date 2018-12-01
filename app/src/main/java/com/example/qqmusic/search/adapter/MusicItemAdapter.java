@@ -37,7 +37,6 @@ public class MusicItemAdapter extends RecyclerView.Adapter<MusicItemAdapter.View
                 mOnMusicItemClickListener.onMusicItemClick(v, (int) vvv.getTag());
                 break;
             case R.id.music_icon:
-                Log.d("Lpp", "onClick: ");
                 mOnDownloadClickListener.onDownloadItemClick(vvv, (int) vvv.getTag());
                 break;
             default:
