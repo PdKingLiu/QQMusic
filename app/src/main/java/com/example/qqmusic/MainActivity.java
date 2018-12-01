@@ -39,10 +39,13 @@ import com.bumptech.glide.Glide;
 import com.example.qqmusic.data.LocalMusic;
 import com.example.qqmusic.data.LocalPlayHistory;
 import com.example.qqmusic.data.PlayHistory;
-import com.example.qqmusic.searchmusic.DownloadService;
-import com.example.qqmusic.searchmusic.model.ModelTask;
-import com.example.qqmusic.searchmusic.presenter.SearchMusicPresenter;
-import com.example.qqmusic.searchmusic.view.SearchFragment;
+import com.example.qqmusic.title_mine.view.MineFragment;
+import com.example.qqmusic.title_musicroom.view.MusicRoomFragment;
+import com.example.qqmusic.title_find.view.FindFragment;
+import com.example.qqmusic.search.DownloadService;
+import com.example.qqmusic.search.model.ModelTask;
+import com.example.qqmusic.search.presenter.SearchMusicPresenter;
+import com.example.qqmusic.search.view.SearchFragment;
 
 import org.litepal.LitePal;
 
@@ -51,7 +54,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.example.qqmusic.Final_music.MUSIC_DOWNLOAD_URL;
 import static org.litepal.LitePalApplication.getContext;
 
 public class MainActivity extends AppCompatActivity {
@@ -298,7 +300,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startDownload() {
-        downloadBinder.startDownloadTask(MUSIC_DOWNLOAD_URL);
+        downloadBinder.startDownloadTask("http://www.170mv.com/kw/other.web.ra01.sycdn.kuwo" +
+                ".cn/resource/n1/128/8/62/3286845604.mp3");
     }
 
 

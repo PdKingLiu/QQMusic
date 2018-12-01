@@ -3,7 +3,7 @@
     <dbname value="SearchHistory"> </dbname>
     <version value="1"> </version>
     <list>
-        <mapping class="com.example.qqmusic.searchmusic.javabean.SearchHistory"> </mapping>
+        <mapping class="com.example.qqmusic.data.SearchHistory"> </mapping>
         <mapping class="com.example.qqmusic.data.PlayHistory"> </mapping>
         <mapping class="com.example.qqmusic.data.LocalMusic"> </mapping>
         <mapping class="com.example.qqmusic.data.LocalPlayHistory"> </mapping>

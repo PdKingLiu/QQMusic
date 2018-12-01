@@ -1,6 +1,6 @@
 package com.example.qqmusic;
 
-interface BasePresenter {
+public interface BasePresenter {
 
     void start();
 

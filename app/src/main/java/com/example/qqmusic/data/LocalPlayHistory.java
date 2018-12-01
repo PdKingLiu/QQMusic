@@ -12,7 +12,9 @@ public class LocalPlayHistory extends LitePalSupport {
     public String album;
 
     public void setAlbum(String album) {
+
         this.album = album;
+
     }
 
     public String getAlbum() {
