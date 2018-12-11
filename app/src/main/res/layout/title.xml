@@ -28,6 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
+            android:scaleType="centerInside"
             android:src="@drawable/title_more" />
 
 

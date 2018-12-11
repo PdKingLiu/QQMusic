@@ -43,10 +43,12 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         LocalMusic localMusic = localMusicList.get(i);
-        viewHolder.itemView.setTag(i);
-        viewHolder.musicName.setText(localMusic.getSong());
-        viewHolder.musicSingerAndalbum.setText(localMusic.getSinger() + " · " + localMusic
-                .getAlbum());
+//        viewHolder.itemView.setTag(i);
+//        viewHolder.musicName.setText(localMusic.getSong());
+//        viewHolder.musicSingerAndalbum.setText(localMusic.getSinger() + " · " + localMusic
+//                .getAlbum());
+
+        viewHolder.setData(localMusic);
     }
 
     @Override
@@ -69,6 +71,10 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<LocalMusicAdapter.Vi
             super(itemView);
             musicName = itemView.findViewById(R.id.music_name);
             musicSingerAndalbum = itemView.findViewById(R.id.music_version);
+        }
+
+        public void setData(LocalMusic localMusic){
+
         }
     }
 

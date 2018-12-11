@@ -26,14 +26,10 @@ public class LocalMusicPresenter implements InterfaceContract.Presenter {
         if (view.isActive()) {
             view.showLoading();
         }
-        interfaceContract.getLocalMusic(context, new com.example.qqmusic.title_mine
-                .loadlocalmusic.model.InterfaceContract.LoadLocalMusicCallBack() {
-            @Override
-            public void loadSucceed(List<LocalMusic> localMusics) {
-                if (view.isActive()) {
-                    view.localMusicLoadSucceed(localMusics);
-                    view.hideLoading();
-                }
+        interfaceContract.getLocalMusic(context, localMusics -> {
+            if (view.isActive()) {
+                view.localMusicLoadSucceed(localMusics);
+                view.hideLoading();
             }
         });
     }

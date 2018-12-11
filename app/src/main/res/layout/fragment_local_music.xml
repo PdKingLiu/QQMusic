@@ -51,24 +51,29 @@
         app:tabTextColor="#808080">
 
         <android.support.design.widget.TabItem
+            android:id="@+id/single_music"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="单曲50" />
+            android:text="单曲" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="10"
+            android:layout_height="wrap_content" />
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="歌手50" />
+            android:text="歌手0" />
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="专辑50" />
+            android:text="专辑0" />
 
         <android.support.design.widget.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="文件夹2" />
+            android:text="文件夹0" />
 
 
     </android.support.design.widget.TabLayout>

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +58,7 @@ public class LocalMusicFragment extends Fragment implements InterfaceContract.Vi
         initLocalMusicRecyclerViewOnCreate();
         return view;
     }
+
 
     private void music_iconListener() {
         music_icon.setOnClickListener(new View.OnClickListener() {
@@ -170,12 +173,10 @@ public class LocalMusicFragment extends Fragment implements InterfaceContract.Vi
     @Override
     public void showLoading() {
         if (mDialog != null && !mDialog.isShowing()) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mDialog.show();
-                }
+            getActivity().runOnUiThread(() -> {
+
             });
+            getActivity().runOnUiThread(() -> mDialog.show());
         }
     }
 
