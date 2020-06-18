@@ -319,9 +319,12 @@ public class SearchFragment extends Fragment implements SearchMusicInterfaceCont
                 + listBean.album.mid
                 + MUSIC_ICON_REAR;
 
-        final String music_url = MUSIC_PLAY_FRONT
-                + listBean.file.mediaMid
-                + MUSIC_PLAY_REAR;
+//        final String music_url = MUSIC_PLAY_FRONT
+//                + listBean.file.mediaMid
+//                + MUSIC_PLAY_REAR;
+
+        // 假数据
+        final String music_url = MusicItemAdapter.getRandomMusicUrl();
 
         mainActivity.setMusicVersionIcon(icon_url);
         mainActivity.setBottomNameAndVersion(listBean.title, listBean.singer.get(0).name);

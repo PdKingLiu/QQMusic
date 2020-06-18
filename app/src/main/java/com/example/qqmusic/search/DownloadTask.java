@@ -2,7 +2,6 @@ package com.example.qqmusic.search;
 
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,9 +43,9 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
         try {
             long downloadedLength = 0;
             String downloadUrl = strings[0];
-            String fileName = "开不了口 - 周杰伦.mp3";
+            String fileName = "以父之名 - 周杰伦.mp3";
             String directory = Environment.getExternalStoragePublicDirectory(Environment
-                    .DIRECTORY_DOWNLOADS).getPath();
+                    .DIRECTORY_MUSIC).getPath();
             file = new File(directory + "/" + fileName);
             if (file.exists()) {
                 downloadedLength = file.length();

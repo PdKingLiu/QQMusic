@@ -1,15 +1,19 @@
 package com.example.qqmusic.search;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.qqmusic.MainActivity;
@@ -17,7 +21,7 @@ import com.example.qqmusic.R;
 
 import java.io.File;
 
- public class DownloadService extends Service {
+public class DownloadService extends Service {
 
     private DownloadTask downloadTask;
 
@@ -37,6 +41,15 @@ import java.io.File;
             stopForeground(true);
             getNotificationManager().notify(1, getNotification("Download Success", -1));
             Toast.makeText(DownloadService.this, "Download Success", Toast.LENGTH_SHORT).show();
+            String fileName = "以父之名 - 周杰伦.mp3";
+            String directory = Environment.getExternalStoragePublicDirectory(Environment
+                    .DIRECTORY_MUSIC).getPath();
+            MediaScannerConnection.scanFile(getApplication(),
+                    new String[]{new File(directory + "/" + fileName).toString()}, null,
+                    (path, uri) -> {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    });
         }
 
         @Override
@@ -61,7 +74,7 @@ import java.io.File;
         }
     };
 
-   public class DownloadBinder extends Binder {
+    public class DownloadBinder extends Binder {
         public void startDownloadTask(String url) {
             if (downloadTask == null) {
                 downloadurl = url;
@@ -83,9 +96,9 @@ import java.io.File;
                 downloadTask.cancelDownload();
             }
             if (downloadurl != null) {
-                String filename = "开不了口 - 周杰伦.mp3";
+                String filename = "以父之名 - 周杰伦.mp3";
                 String directory = Environment.getExternalStoragePublicDirectory(Environment
-                        .DIRECTORY_DOWNLOADS).getPath();
+                        .DIRECTORY_MUSIC).getPath();
                 File file = new File(directory + "/" + filename);
                 if (file.exists()) {
                     file.delete();
@@ -107,10 +120,24 @@ import java.io.File;
     }
 
     private Notification getNotification(String title, int progress) {
+        String CHANNEL_ONE_ID = "com.example.qqmusic.search";
+        String CHANNEL_ONE_NAME = "ChannelOneName";
+        NotificationChannel notificationChannel;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(CHANNEL_ONE_ID,
+                    CHANNEL_ONE_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableLights(false);
+            notificationChannel.enableVibration(false);
+            notificationChannel.setImportance(NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(notificationChannel);
+        }
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.vip_icon);
+        builder.setChannelId(CHANNEL_ONE_ID);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.vip_icon));
         builder.setContentIntent(pendingIntent);
         builder.setContentTitle(title);
@@ -120,5 +147,4 @@ import java.io.File;
         }
         return builder.build();
     }
-
 }

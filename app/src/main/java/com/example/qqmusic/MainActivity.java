@@ -306,8 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startDownload() {
-        downloadBinder.startDownloadTask("http://www.170mv.com/kw/other.web.ra01.sycdn.kuwo" +
-                ".cn/resource/n1/128/8/62/3286845604.mp3");
+        downloadBinder.startDownloadTask("http://mp3.9ku.com/hot/2004/07-17/41811.mp3");
     }
 
 
